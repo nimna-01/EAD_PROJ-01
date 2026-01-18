@@ -51,7 +51,7 @@
         </section>
     </main>
     <footer>
-        <p>&copy; 2026 Project Name. All rights reserved.</p>
+        <p>&copy; 2026 Smart Crop Supply Management System. All rights reserved.</p>
     </footer>
 </body>
 </html> 
