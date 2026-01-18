@@ -109,7 +109,7 @@ public class RegisterForm extends JFrame {
      * Database logic for registration.
      * Call this method from your Main2.java listener.
      */
-    public void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {
+    public void btnSubmitActionPerformed() {
         // Attach this in your constructor or after creating btnSubmit
 
             String fullName = txtFullname.getText();
@@ -139,7 +139,11 @@ public class RegisterForm extends JFrame {
 
                 Statement st = (Statement) con.createStatement();
 
-                query = "INSERT INTO register_tbl (fullName,username,contactNo,email,password,role)"+ "VALUES('"+fullName+"','"+username+"','"+contact+"','"+email+"','"+password+"','"+role+"')"; //QL INSERT query is built and run to save data into the signuptabletable.
+                query = "INSERT INTO register_tbl (fullName,username,contactNo,email,password,role)"+ "VALUES('"+fullName+"','"+username+"','"+contact+"','"+email+"','"+password+"','"+role+"')";
+                if (cbRole.getSelectedIndex() == 0) {
+                    JOptionPane.showMessageDialog(this, "Please select a valid Role.", "Input Error", JOptionPane.WARNING_MESSAGE);
+                    return; // Stop the code here so it doesn't try to save to DB
+                }//QL INSERT query is built and run to save data into the signuptabletable.
                 int result = st.executeUpdate(query);
 
                 if (result > 0) {
@@ -158,10 +162,7 @@ public class RegisterForm extends JFrame {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(this, "Database Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
-        if (cbRole.getSelectedIndex() == 0) {
-            JOptionPane.showMessageDialog(this, "Please select a valid Role.", "Input Error", JOptionPane.WARNING_MESSAGE);
-            return; // Stop the code here so it doesn't try to save to DB
-        }
+
         }
 
 

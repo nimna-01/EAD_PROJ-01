@@ -52,7 +52,7 @@ public class LoginForm extends JFrame
             btnLogin = new JButton("Login");
             btnLogin.putClientProperty(FlatClientProperties.STYLE,
                     "background: #4CAF50; foreground: #FFFFFF; arc: 20; font: bold; borderWidth: 0; focusWidth: 0");
-            btnLogin.addActionListener(e -> btnLoginActionPerformed(null));
+            btnLogin.addActionListener(e -> btnLoginActionPerformed());
 
 
             // Register Link
@@ -83,8 +83,8 @@ public class LoginForm extends JFrame
             add(mainPanel);
         }
 
-    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {
-        String username = txtUser.getText().trim();
+    private void btnLoginActionPerformed() {
+        /*String username = txtUser.getText().trim();
         String password = new String(txtPass.getPassword()).trim();
         String fullName = "";
 
@@ -109,10 +109,10 @@ public class LoginForm extends JFrame
 
                 if (role.equalsIgnoreCase("ADMIN")) {
                     new AdminDash(null).setVisible(true);
-                } else if (role.equalsIgnoreCase("FARMER")) {
-                    new BuyerDash(username).setVisible(true);
-                } else if (role.equalsIgnoreCase("BUYER")) {
+                } else if (role.equalsIgnoreCase("Officer")) {
                     new OfficerDash(username).setVisible(true);
+                } else if (role.equalsIgnoreCase("BUYER")) {
+                    new BuyerDash(username).setVisible(true);
                 }
 
                 dispose();
@@ -123,7 +123,7 @@ public class LoginForm extends JFrame
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "Database error");
-        }
+        }*/
     }
 
 }

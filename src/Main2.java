@@ -1,12 +1,15 @@
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatClientProperties;
+import db.DBconnection;
 import javax.swing.*;
 import java.awt.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class Main2 {
 
     public static void main(String[] args) {
-
         try {
             FlatDarkLaf.setup();
             UIManager.put("Button.arc", 20);
@@ -21,10 +24,8 @@ public class Main2 {
     // ---------- WELCOME ----------
     private static void showWelcome() {
         OpenForm open = new OpenForm();
-
         open.btnBegin.addActionListener(e -> switchFrame(open, Main2::showLogin));
         open.btnContact.addActionListener(e -> new Contact(open).setVisible(true));
-
         open.setVisible(true);
     }
 
@@ -39,20 +40,59 @@ public class Main2 {
         login.setVisible(true);
     }
 
-    // ---------- LOGIN LOGIC ----------
+    // ---------- LOGIN LOGIC (UPDATED WITH DB CHECK) ----------
     private static void handleLogin(LoginForm f) {
-        String user = f.txtUser.getText().trim();
-        String pass = new String(f.txtPass.getPassword()).trim();
+        String username = f.txtUser.getText().trim();
+        String password = new String(f.txtPass.getPassword()).trim();
 
-        f.txtUser.putClientProperty(FlatClientProperties.OUTLINE, user.isEmpty() ? "error" : null);
-        f.txtPass.putClientProperty(FlatClientProperties.OUTLINE, pass.isEmpty() ? "error" : null);
+        // Visual feedback for empty fields
+        f.txtUser.putClientProperty(FlatClientProperties.OUTLINE, username.isEmpty() ? "error" : null);
+        f.txtPass.putClientProperty(FlatClientProperties.OUTLINE, password.isEmpty() ? "error" : null);
 
-        if (user.isEmpty() || pass.isEmpty()) {
-            JOptionPane.showMessageDialog(f, "Please fill all fields", "Login Error", JOptionPane.ERROR_MESSAGE);
+        if (username.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(f, "Please enter both username and password.", "Login Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        System.out.println("Login attempt: " + user);
+        // Fixed query: Fetching BOTH role and fullName
+        String query = "SELECT fullname, role FROM register_tbl WHERE username=? AND password=?";
+
+        try (Connection con = DBconnection.getConnection();
+             PreparedStatement pst = con.prepareStatement(query)) {
+
+            pst.setString(1, username);
+            pst.setString(2, password);
+
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                // Ensure the column name matches your database (case sensitive in some DBs)
+                String fullName = rs.getString("fullname");
+                String role = rs.getString("role");
+
+                f.dispose(); // Close login window
+
+                JOptionPane.showMessageDialog(f, "System Login has Succeeded !", "Access Granted", JOptionPane.INFORMATION_MESSAGE);
+
+                // Role-Based Navigation
+                if ("OFFICER".equalsIgnoreCase(role)) {
+                    showOfficerDash(fullName);
+                } else if ("ADMIN".equalsIgnoreCase(role)) {
+                    // Pass the name to AdminDash if your constructor supports it
+                    new AdminDash(fullName).setVisible(true);
+                } else if ("BUYER".equalsIgnoreCase(role)) {
+                    // You can choose to pass username or fullName
+                    new BuyerDash(fullName).setVisible(true);
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(f, "Invalid username or password", "Access Denied", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(f, "Database Error: " + ex.getMessage());
+            ex.printStackTrace();
+        }
     }
 
     // ---------- REGISTER ----------
@@ -60,10 +100,26 @@ public class Main2 {
         RegisterForm reg = new RegisterForm();
         reg.setLocation(pos);
 
-        reg.btnSubmit.addActionListener(e -> reg.btnSubmitActionPerformed(e));
+        // This calls the performRegistration method we wrote in the RegisterForm class
+        reg.btnSubmit.addActionListener(e -> reg.btnSubmitActionPerformed());
         reg.btnBack.addActionListener(e -> switchFrame(reg, Main2::showLogin));
 
         reg.setVisible(true);
+    }
+
+    // ---------- OFFICER DASHBOARD ----------
+    private static void showOfficerDash(String fullName) {
+        OfficerDash dash = new OfficerDash(fullName);
+
+        dash.btnLogout.addActionListener(e -> {
+            int confirm = JOptionPane.showConfirmDialog(dash, "Are you sure you want to logout?", "Logout", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                dash.dispose();
+                showLogin(new Point(200, 200));
+            }
+        });
+
+        dash.setVisible(true);
     }
 
     // ---------- COMMON FRAME SWITCH ----------
