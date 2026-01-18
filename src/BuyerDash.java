@@ -16,7 +16,7 @@ public class BuyerDash extends JFrame {
     }
 
     private void initUI() {
-        setTitle("Officer Dashboard - Smart Crop");
+        setTitle("Buyer Dashboard - Smart Crop");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(1150, 750);
         setLocationRelativeTo(null);
@@ -72,7 +72,7 @@ public class BuyerDash extends JFrame {
         topHeader.setBackground(new Color(30, 30, 30));
         topHeader.setPreferredSize(new Dimension(0, 70));
 
-        JLabel pageTitle = new JLabel("Officer Overview");
+        JLabel pageTitle = new JLabel("Buyer Overview");
         pageTitle.putClientProperty(
                 FlatClientProperties.STYLE,
                 "font: bold +5; foreground: #FFFFFF"
