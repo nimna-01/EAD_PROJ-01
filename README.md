@@ -9,8 +9,8 @@
 <body>
 
 <header>
-    <h1><p>🌱 Smart Crop Supply Management System</p><br><p>  </p></h1>
-    <p>Enterprise Application Development (EAD) Project</p>
+    <h1><p>🌱 Smart Crop Supply Management System</p><br><p>Enterprise Application Development (EAD) Project  </p></h1>
+    <p> </p>
 </header>
 
 
