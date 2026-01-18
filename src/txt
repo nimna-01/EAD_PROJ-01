@@ -55,8 +55,7 @@ public class Main2 {
         }
 
         // Fixed query: Fetching BOTH role and fullName
-        String query =
-                "SELECT username, fullname, role FROM register_tbl WHERE username=? AND password=?";
+        String query = "SELECT fullname, role FROM register_tbl WHERE username=? AND password=?";
 
         try (Connection con = DBconnection.getConnection();
              PreparedStatement pst = con.prepareStatement(query)) {
@@ -67,34 +66,28 @@ public class Main2 {
             ResultSet rs = pst.executeQuery();
 
             if (rs.next()) {
-
+                // Ensure the column name matches your database (case sensitive in some DBs)
                 String fullName = rs.getString("fullname");
                 String role = rs.getString("role");
                 String userName2 = rs.getString("username");
 
-                JOptionPane.showMessageDialog(
-                        f,
-                        "System Login has Succeeded !",
-                        "Access Granted",
-                        JOptionPane.INFORMATION_MESSAGE
-                );
+                JOptionPane.showMessageDialog(f, "System Login has Succeeded !", "Access Granted", JOptionPane.INFORMATION_MESSAGE);
 
-                f.dispose();
+                f.dispose(); // Close login window
 
+                // Role-Based Navigation
                 if ("OFFICER".equalsIgnoreCase(role)) {
-                    showOfficerDash(fullName, userName2);
+                    showOfficerDash(fullName,userName2);
                 } else if ("ADMIN".equalsIgnoreCase(role)) {
-                    showAdminDash(fullName, userName2);
+                    // Pass the name to AdminDash if your constructor supports it
+                    showAdminDash(fullName,userName2);
                 } else if ("BUYER".equalsIgnoreCase(role)) {
-                    showBuyerDash(fullName, userName2);
+                    // You can choose to pass username or fullName
+                    showBuyerDash(fullName,userName2);
                 }
+
             } else {
-                JOptionPane.showMessageDialog(
-                        f,
-                        "Invalid username or password",
-                        "Access Denied",
-                        JOptionPane.ERROR_MESSAGE
-                );
+                JOptionPane.showMessageDialog(f, "Invalid username or password", "Access Denied", JOptionPane.ERROR_MESSAGE);
             }
 
         } catch (Exception ex) {
