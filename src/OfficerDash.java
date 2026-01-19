@@ -113,6 +113,7 @@ public class OfficerDash extends JFrame {
             tableContainer.add(new FarmerMgr(lblTotalFarmers), BorderLayout.CENTER);
             tableContainer.revalidate();
             tableContainer.repaint();
+            pageTitle.setText("Farmer Registering System");
         });
 
         btnExit.addActionListener(e -> {
@@ -137,6 +138,7 @@ public class OfficerDash extends JFrame {
             tableContainer.add(new CropsMgr(lblTotalCrops), BorderLayout.CENTER);
             tableContainer.revalidate();
             tableContainer.repaint();
+            pageTitle.setText("Crops Interting System");
         });
 
         // Inside OfficerDash sidebar actions
@@ -152,6 +154,28 @@ public class OfficerDash extends JFrame {
             tableContainer.revalidate();
             tableContainer.repaint();
             pageTitle.setText("Supply Preparation System");
+        });
+
+        btnInventory.addActionListener(e -> {
+            setActiveButton(btnInventory);
+            tableContainer.removeAll();
+
+            // Call the Read-Only Inventory Manager
+            InventoryMgr invMgr = new InventoryMgr();
+
+            tableContainer.add(invMgr, BorderLayout.CENTER);
+            tableContainer.revalidate();
+            tableContainer.repaint();
+            pageTitle.setText("Inventory Overview (Read-Only)");
+        });
+
+        btnReports.addActionListener(e -> {
+            setActiveButton(btnReports);
+            tableContainer.removeAll();
+            tableContainer.add(new ReportMgr(), BorderLayout.CENTER);
+            tableContainer.revalidate();
+            tableContainer.repaint();
+            pageTitle.setText("Genterate Reporting System");
         });
 
     }
