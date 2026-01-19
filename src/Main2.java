@@ -43,21 +43,20 @@ public class Main2 {
 
     // ---------- LOGIN LOGIC (UPDATED WITH DB CHECK) ----------
     private static void handleLogin(LoginForm f) {
+
         String username = f.txtUser.getText().trim();
         String password = new String(f.txtPass.getPassword()).trim();
 
-        // Visual feedback for empty fields
-        f.txtUser.putClientProperty(FlatClientProperties.OUTLINE, username.isEmpty() ? "error" : null);
-        f.txtPass.putClientProperty(FlatClientProperties.OUTLINE, password.isEmpty() ? "error" : null);
+        f.txtUser.putClientProperty(FlatClientProperties.OUTLINE, username.isEmpty() ? "error" : null
+        );
+        f.txtPass.putClientProperty(FlatClientProperties.OUTLINE, password.isEmpty() ? "error" : null
+        );
 
         if (username.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(f, "Please enter both username and password.", "Login Error", JOptionPane.WARNING_MESSAGE);
-            return;
+            JOptionPane.showMessageDialog(f, "Please enter both username and password.", "Login Error", JOptionPane.WARNING_MESSAGE);return;
         }
 
-        // Fixed query: Fetching BOTH role and fullName
-        String query =
-                "SELECT username, fullname, role FROM register_tbl WHERE username=? AND password=?";
+        String query = "SELECT userId, username, fullname, role " + "FROM register_tbl " + "WHERE username=? AND password=?";
 
         try (Connection con = DBconnection.getConnection();
              PreparedStatement pst = con.prepareStatement(query)) {
@@ -69,40 +68,38 @@ public class Main2 {
 
             if (rs.next()) {
 
+                int id = rs.getInt("userId");
                 String fullName = rs.getString("fullname");
                 String role = rs.getString("role");
                 String userName2 = rs.getString("username");
 
-                JOptionPane.showMessageDialog(
-                        f,
-                        "System Login has Succeeded !",
-                        "Access Granted",
-                        JOptionPane.INFORMATION_MESSAGE
+                JOptionPane.showMessageDialog(f, "System Login has Succeeded!", "Access Granted", JOptionPane.INFORMATION_MESSAGE
                 );
 
                 f.dispose();
 
                 if ("OFFICER".equalsIgnoreCase(role)) {
-                    showOfficerDash(fullName, userName2);
+                    showOfficerDash(fullName, userName2, id);
                 } else if ("ADMIN".equalsIgnoreCase(role)) {
-                    showAdminDash(fullName, userName2);
+                    showAdminDash(fullName, userName2, id);
                 } else if ("BUYER".equalsIgnoreCase(role)) {
-                    showBuyerDash(fullName, userName2);
+                    showBuyerDash(fullName, userName2, id);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Unknown role: " + role, "Login Error", JOptionPane.ERROR_MESSAGE
+                    );
                 }
+
             } else {
-                JOptionPane.showMessageDialog(
-                        f,
-                        "Invalid username or password",
-                        "Access Denied",
-                        JOptionPane.ERROR_MESSAGE
+                JOptionPane.showMessageDialog(f, "Invalid username or password", "Access Denied", JOptionPane.ERROR_MESSAGE
                 );
             }
 
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(f, "Database Error: " + ex.getMessage());
-            ex.printStackTrace();
+            JOptionPane.showMessageDialog(f, "Database Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE
+            );ex.printStackTrace();
         }
     }
+
 
     // ---------- REGISTER ----------
     private static void showRegister(Point pos) {
@@ -117,22 +114,28 @@ public class Main2 {
     }
 
     // ---------- OFFICER DASHBOARD ----------
-    private static void showOfficerDash(String fullName,String userName2) {
-        OfficerDash dash = new OfficerDash(fullName,userName2);
+    private static void showOfficerDash(String fullName,String userName2,int Id) {
+        OfficerDash dash = new OfficerDash(fullName,userName2,Id);
 
         dash.btnLogout.addActionListener(e -> {
             int confirm = JOptionPane.showConfirmDialog(dash, "Are you sure you want to logout?", "Logout", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
                 dash.dispose();
                 showWelcome(new Point(200, 200));
+            }
+        });
+        dash.btnExit.addActionListener(e -> {
+            int confirm = JOptionPane.showConfirmDialog(dash, "Are you sure you want exit from application?", "Exit", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                System.exit(0);
             }
         });
 
         dash.setVisible(true);
     }
     // ---------- ADMIN DASHBOARD ----------
-    private static void showAdminDash(String fullName,String userName2) {
-        AdminDash dash = new AdminDash(fullName,userName2);
+    private static void showAdminDash(String fullName,String userName2,int Id) {
+        AdminDash dash = new AdminDash(fullName,userName2,Id);
 
         dash.btnLogout.addActionListener(e -> {
             int confirm = JOptionPane.showConfirmDialog(dash, "Are you sure you want to logout?", "Logout", JOptionPane.YES_NO_OPTION);
@@ -141,18 +144,30 @@ public class Main2 {
                 showWelcome(new Point(200, 200));
             }
         });
+        dash.btnExit.addActionListener(e -> {
+            int confirm = JOptionPane.showConfirmDialog(dash, "Are you sure you want exit from application?", "Exit", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                System.exit(0);
+            }
+        });
 
         dash.setVisible(true);
     }
     // ---------- OFFICER DASHBOARD ----------
-    private static void showBuyerDash(String fullName,String userName2) {
-        BuyerDash dash = new BuyerDash(fullName,userName2);
+    private static void showBuyerDash(String fullName,String userName2,int Id) {
+        BuyerDash dash = new BuyerDash(fullName,userName2,Id);
 
         dash.btnLogout.addActionListener(e -> {
             int confirm = JOptionPane.showConfirmDialog(dash, "Are you sure you want to logout?", "Logout", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
                 dash.dispose();
                 showWelcome(new Point(200, 200));
+            }
+        });
+        dash.btnExit.addActionListener(e -> {
+            int confirm = JOptionPane.showConfirmDialog(dash, "Are you sure you want exit from application?", "Exit", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                System.exit(0);
             }
         });
 
