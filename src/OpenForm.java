@@ -26,7 +26,7 @@ public class OpenForm extends JFrame {
         card.putClientProperty(FlatClientProperties.STYLE, "arc: 40; background: #252525");
 
         // App Logo/Icon Placeholder (Using Text for now)
-        ImageIcon originalIcon = new ImageIcon("C:\\Users\\SANDANIMNE\\Desktop\\EAD fnl\\logo.png");
+        ImageIcon originalIcon = new ImageIcon("src/icon/logo.png");
         Image scaledImg = originalIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH); // adjust 100x100
         ImageIcon logoIcon = new ImageIcon(scaledImg);
         JLabel logoLabel = new JLabel(logoIcon);

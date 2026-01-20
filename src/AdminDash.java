@@ -34,7 +34,7 @@ public class AdminDash extends JFrame {
 
         // Logo
         try {
-            ImageIcon originalIcon = new ImageIcon("C:\\Users\\SANDANIMNE\\Desktop\\EAD fnl\\logo.png");
+            ImageIcon originalIcon = new ImageIcon("src/icon/logo.png");
             Image scaledImg = originalIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
             sidebar.add(new JLabel(new ImageIcon(scaledImg)), "center, gapbottom 10");
         } catch (Exception e) { /* Handle path */ }
