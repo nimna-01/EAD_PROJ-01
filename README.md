@@ -203,7 +203,7 @@
     <ul>
         <li>Advanced analytics dashboards</li>
         <li>Email and notification system</li>
-        <li>Excel and CSV export support</li>
+        <li>PDF export support</li>
         <li>Improved security and validation</li>
         <li>Web-based and mobile versions</li>
     </ul>
