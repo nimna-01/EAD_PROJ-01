@@ -91,6 +91,7 @@
         <li>Install MySQL and create a database.</li>
         <li>Import the provided <code>database.sql</code> file.</li>
         <li>Configure database credentials in the DB connection file.</li>
+        <li>Change my mysql port <code>Defualt</code> --> <code>3307</code>.</li>
     </ol>
 </section>
 <br>
